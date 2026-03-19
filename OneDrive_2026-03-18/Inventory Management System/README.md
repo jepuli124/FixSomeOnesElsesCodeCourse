@@ -77,6 +77,7 @@ This project includes 8 python scripts that demonstrate how to interact with a G
 8. Click on the `sales` button to see your billing.
 
 ### Pre-Requisites
+time, os, and sqlite3 should be included in default python since python 2.5
 Ensure that you have the following Python Pakages installed in your PC:
 - `time`: `pip install time`
 - `pil`: `pip install pil`
