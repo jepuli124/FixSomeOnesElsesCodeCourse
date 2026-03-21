@@ -1,0 +1,69 @@
+@startuml
+hide empty members
+
+class Employee {
+    eid : int primary key autoincrement
+    name : text
+    email : text
+    gender : text
+    contact : text
+    dob : text
+    doj : text
+    pass : text
+    utype : text
+    address : text
+    salary : text 
+}
+
+class Supplier {
+    invoice : int primary key autoincrement
+    name : text
+    contact : text
+    desc : text
+}
+
+class Category {
+    cid : int, primary, key, autoincrement
+    name : text
+}
+
+class Product {
+    pid : int, primary, key, autoincrement
+    Category : text
+    Supplier : text
+    name : text
+    price : text
+    qty : text
+    status : text
+}
+
+class Customer {
+    name : text
+    Contact No. : int
+}
+class Bill {
+    Customer name : text
+    Ph. no. : int 
+    Phone No. : int
+    Address : text
+    Inventory : text
+    Bill no. : int
+    date : text
+    products : list of products
+    Bill amount : int
+    Discount  : int
+    Net pay : int
+}
+
+class Sales {
+    bill : Bill
+}
+
+Category --* Product : contains cid
+Supplier --* Product : contains invoice
+
+Product "many" --* "1" Bill : contains pid
+Customer --* Bill
+Bill --* Sales
+
+@enduml
