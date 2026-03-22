@@ -1,0 +1,93 @@
+@startuml
+hide empty members
+
+class Billing {
+    __init__(self, root)
+    get_input(self, num)
+    clear_cal(self)
+    perform_cal(self)
+    show(self)
+    search(self)
+    get_data(self, ev)
+    get_data_cart(self, ev)
+    add_update_cart(self)
+    bill_update(self)
+    show_cart(self)
+    generate_bill(self)
+    bill_top(self)
+    bill_middle(self)
+    bill_buttom(self)
+    clear_cart(self)
+    clear_all(self)
+    update_date_time(self)
+    print_bill(self)
+}
+
+class IMS {
+    __init__(self, root)
+    employee(self)
+    supplier(self)
+    category(self)
+    product(self)
+    sales(self)
+    Update_content(self)
+}
+
+class Category {
+    __init__(self, root)
+    add(self)
+    show(self)
+    clear(self)
+    get_data(self, ev)
+    delete(self)
+}   
+
+class Employee {
+    __init__(self, root)
+    add(self)
+    show(self)
+    get_data(self, ev)
+    update(self)
+    delete(self)
+    clear(self)
+    search(self)
+}
+
+class Product {
+    __init__(self, root)
+    fetch_cat_sup(self)
+    add(self)
+    show(self)
+    get_data(self, ev)
+    update(self)
+    delete(self)
+    clear(self)
+    search(self)
+}
+
+class Sales {
+    __init__(self, root)
+    show(self, ev)
+    get_data(self, ev)
+    search(self)
+    clear(self)
+}
+
+class Supplier {
+    __init__(self, root)
+    add(self)
+    show(self)
+    get_data(self, ev)
+    update(self)
+    delete(self)
+    clear(self)
+    search(self)
+}
+
+IMS --> Category
+IMS --> Employee
+IMS --> Product
+IMS --> Sales
+IMS --> Supplier
+
+@enduml

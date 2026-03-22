@@ -214,16 +214,19 @@ class IMS:
             bill = len(os.listdir(BILL_DIR))
             self.lbl_sales.config(text=f"Total Sales\n[ {bill} ]")
 
-            time_ = time.strftime("%I:%M:%S")
-            date_ = time.strftime("%d-%m-%Y")
-            self.lbl_clock.config(
-                text=f"Welcome to Inventory Management System\t\t Date: {date_}\t\t Time: {time_}"
-            )
-
-            self.lbl_clock.after(200, self.update_content)
+            
 
         except Exception as ex:
             messagebox.showerror("Error", f"Error due to : {str(ex)}", parent=self.root)
+            
+    def update_clock(self):
+        time_ = time.strftime("%I:%M:%S")
+        date_ = time.strftime("%d-%m-%Y")
+        self.lbl_clock.config(
+            text=f"Welcome to Inventory Management System\t\t Date: {date_}\t\t Time: {time_}"
+        )
+
+        self.lbl_clock.after(200, self.update_clock)
 
 def main():
     root = Tk()
