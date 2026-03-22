@@ -2,8 +2,9 @@ from tkinter import *
 from PIL import Image, ImageTk
 from tkinter import messagebox
 import time
-import sqlite3
 import os
+import directoryHandler
+import databaseHandler
 
 from employee import employeeClass
 from supplier import supplierClass
@@ -11,13 +12,9 @@ from category import categoryClass
 from product import productClass
 from sales import salesClass
 
-# ------------------ BASE PATH SETUP ------------------
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-IMAGE_DIR = os.path.join(BASE_DIR, "images")
-BILL_DIR = os.path.join(BASE_DIR, "bill")
-
-os.makedirs(BILL_DIR, exist_ok=True)
-# ---------------------------------------------------
+BASE_DIR = directoryHandler.base_path()
+IMAGE_DIR = directoryHandler.image_path()
+BILL_DIR = directoryHandler.bill_path()
 
 class IMS:
     def __init__(self, root):
@@ -28,7 +25,7 @@ class IMS:
 
         # ------------- title --------------
         self.icon_title = PhotoImage(file=os.path.join(IMAGE_DIR, "logo1.png"))
-        title = Label(
+        Label(
             self.root,
             text="Inventory Management System",
             image=self.icon_title,
@@ -41,8 +38,8 @@ class IMS:
         ).place(x=0, y=0, relwidth=1, height=70)
 
         # ------------ logout button -----------
-        btn_logout = Button(
-            self.root, text="Logout",
+        Button(
+            self.root, text="Logout", command=self.logout,
             font=("times new roman", 15, "bold"),
             bg="yellow", cursor="hand2"
         ).place(x=1150, y=10, height=50, width=150)
@@ -67,7 +64,7 @@ class IMS:
         lbl_menuLogo = Label(LeftMenu, image=self.MenuLogo)
         lbl_menuLogo.pack(side=TOP, fill=X)
 
-        lbl_menu = Label(
+        Label(
             LeftMenu, text="Menu",
             font=("times new roman", 20),
             bg="#009688"
@@ -75,7 +72,7 @@ class IMS:
 
         self.icon_side = PhotoImage(file=os.path.join(IMAGE_DIR, "side.png"))
 
-        btn_employee = Button(
+        Button(
             LeftMenu, text="Employee", command=self.employee,
             image=self.icon_side, compound=LEFT,
             padx=5, anchor="w",
@@ -83,7 +80,7 @@ class IMS:
             bg="white", bd=3, cursor="hand2"
         ).pack(side=TOP, fill=X)
 
-        btn_supplier = Button(
+        Button(
             LeftMenu, text="Supplier", command=self.supplier,
             image=self.icon_side, compound=LEFT,
             padx=5, anchor="w",
@@ -91,7 +88,7 @@ class IMS:
             bg="white", bd=3, cursor="hand2"
         ).pack(side=TOP, fill=X)
 
-        btn_category = Button(
+        Button(
             LeftMenu, text="Category", command=self.category,
             image=self.icon_side, compound=LEFT,
             padx=5, anchor="w",
@@ -99,7 +96,7 @@ class IMS:
             bg="white", bd=3, cursor="hand2"
         ).pack(side=TOP, fill=X)
 
-        btn_product = Button(
+        Button(
             LeftMenu, text="Products", command=self.product,
             image=self.icon_side, compound=LEFT,
             padx=5, anchor="w",
@@ -107,7 +104,7 @@ class IMS:
             bg="white", bd=3, cursor="hand2"
         ).pack(side=TOP, fill=X)
 
-        btn_sales = Button(
+        Button(
             LeftMenu, text="Sales", command=self.sales,
             image=self.icon_side, compound=LEFT,
             padx=5, anchor="w",
@@ -115,7 +112,7 @@ class IMS:
             bg="white", bd=3, cursor="hand2"
         ).pack(side=TOP, fill=X)
 
-        btn_exit = Button(
+        Button(
             LeftMenu, text="Exit",
             image=self.icon_side, compound=LEFT,
             padx=5, anchor="w",
@@ -161,7 +158,7 @@ class IMS:
         self.lbl_sales.place(x=650, y=300, height=150, width=300)
 
         # ------------ footer -----------------
-        lbl_footer = Label(
+        Label(
             self.root,
             text="IMS-Inventory Management System",
             font=("times new roman", 12),
@@ -171,6 +168,9 @@ class IMS:
         self.update_content()
 
     # -------------- functions ----------------
+    def logout(self):
+        exit(0)
+
     def employee(self):
         self.new_win = Toplevel(self.root)
         self.new_obj = employeeClass(self.new_win)
@@ -192,8 +192,7 @@ class IMS:
         self.new_obj = salesClass(self.new_win)
 
     def update_content(self):
-        con = sqlite3.connect(database=os.path.join(BASE_DIR, 'ims.db'))
-        cur = con.cursor()
+        cur, con = databaseHandler.get_con_and_cursor()
 
         try:
             cur.execute("select * from product")
@@ -226,8 +225,9 @@ class IMS:
         except Exception as ex:
             messagebox.showerror("Error", f"Error due to : {str(ex)}", parent=self.root)
 
-
-if __name__ == "__main__":
+def main():
     root = Tk()
-    obj = IMS(root)
+    IMS(root)
     root.mainloop()
+if __name__ == "__main__":
+    main()

@@ -1,16 +1,13 @@
 from tkinter import *
 from PIL import Image, ImageTk
-from tkinter import ttk, messagebox
-import sqlite3
+from tkinter import messagebox
 import os
+import directoryHandler
 
 # ------------------ BASE PATH SETUP ------------------
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-IMAGE_DIR = os.path.join(BASE_DIR, "images")
-BILL_DIR = os.path.join(BASE_DIR, "bill")
-
-os.makedirs(BILL_DIR, exist_ok=True)
-# ---------------------------------------------------
+BASE_DIR = directoryHandler.base_path() 
+IMAGE_DIR = directoryHandler.image_path()
+BILL_DIR = directoryHandler.bill_path()
 
 class salesClass:
     def __init__(self, root):
@@ -21,10 +18,10 @@ class salesClass:
         self.root.focus_force()
 
         self.blll_list = []
-        self.var_invoice = StringVar()
+        self.invoice_number = StringVar()
 
         # --------------- title ---------------------
-        lbl_title = Label(
+        Label(
             self.root,
             text="View Customer Bills",
             font=("goudy old style", 30),
@@ -37,17 +34,17 @@ class salesClass:
         lbl_invoice = Label(self.root, text="Invoice No.", font=("times new roman", 15), bg="white")
         lbl_invoice.place(x=50, y=100)
 
-        txt_invoice = Entry(self.root, textvariable=self.var_invoice, font=("times new roman", 15), bg="lightyellow")
+        txt_invoice = Entry(self.root, textvariable=self.invoice_number, font=("times new roman", 15), bg="lightyellow")
         txt_invoice.place(x=160, y=100, width=180, height=28)
 
-        btn_search = Button(
-            self.root, text="Search", command=self.search,
+        Button(
+            self.root, text="Search", command=self.search_sale,
             font=("times new roman", 15, "bold"),
             bg="#2196f3", fg="white", cursor="hand2"
         ).place(x=360, y=100, width=120, height=28)
 
-        btn_clear = Button(
-            self.root, text="Clear", command=self.clear,
+        Button(
+            self.root, text="Clear", command=self.clear_bill_area,
             font=("times new roman", 15, "bold"),
             bg="lightgray", cursor="hand2"
         ).place(x=490, y=100, width=120, height=28)
@@ -64,13 +61,13 @@ class salesClass:
         scrolly.pack(side=RIGHT, fill=Y)
         scrolly.config(command=self.Sales_List.yview)
         self.Sales_List.pack(fill=BOTH, expand=1)
-        self.Sales_List.bind("<ButtonRelease-1>", self.get_data)
+        self.Sales_List.bind("<ButtonRelease-1>", self.get_data_file)
 
         # --------------- bill area ----------------------
         bill_Frame = Frame(self.root, bd=3, relief=RIDGE)
         bill_Frame.place(x=280, y=140, width=410, height=330)
 
-        lbl_title2 = Label(
+        Label(
             bill_Frame, text="Customer Bill Area",
             font=("goudy old style", 20), bg="orange"
         ).pack(side=TOP, fill=X)
@@ -90,10 +87,10 @@ class salesClass:
         lbl_image = Label(self.root, image=self.bill_photo, bd=0)
         lbl_image.place(x=700, y=110)
 
-        self.show()
+        self.refresh_sales()
 
     # -------------------------------------------------------
-    def show(self):
+    def refresh_sales(self):
         del self.blll_list[:]
         self.Sales_List.delete(0, END)
 
@@ -102,7 +99,7 @@ class salesClass:
                 self.Sales_List.insert(END, i)
                 self.blll_list.append(i.split('.')[0])
 
-    def get_data(self, ev):
+    def get_data_file(self, _):
         index_ = self.Sales_List.curselection()
         if not index_:
             return
@@ -115,12 +112,12 @@ class salesClass:
             for i in fp:
                 self.bill_area.insert(END, i)
 
-    def search(self):
-        if self.var_invoice.get() == "":
+    def search_sale(self):
+        if self.invoice_number.get() == "":
             messagebox.showerror("Error", "Invoice no. should be required", parent=self.root)
         else:
-            if self.var_invoice.get() in self.blll_list:
-                file_path = os.path.join(BILL_DIR, f"{self.var_invoice.get()}.txt")
+            if self.invoice_number.get() in self.blll_list:
+                file_path = os.path.join(BILL_DIR, f"{self.invoice_number.get()}.txt")
                 self.bill_area.delete('1.0', END)
 
                 with open(file_path, 'r') as fp:
@@ -129,12 +126,13 @@ class salesClass:
             else:
                 messagebox.showerror("Error", "Invalid Invoice No.", parent=self.root)
 
-    def clear(self):
-        self.show()
+    def clear_bill_area(self):
+        self.refresh_sales()
         self.bill_area.delete('1.0', END)
 
-
-if __name__ == "__main__":
+def main():
     root = Tk()
-    obj = salesClass(root)
+    salesClass(root)
     root.mainloop()
+if __name__ == "__main__":
+    main()
