@@ -1,0 +1,33 @@
+@startuml
+
+[Dashboard view] as d
+[Product view] as p
+[Sales view] as s
+[Employee view] as e
+[Supplier view] as su
+[Category view] as c
+[Billing view]
+
+[Product]
+[Billing]
+[Category]
+[Employee]
+[Supplier]
+[Sales]
+
+
+d --> p
+d --> c
+d --> su
+d --> s
+d --> e
+
+Product --> Category
+Product --> Supplier
+
+Billing --> Product
+Billing --> Customer
+
+Sales --> Billing
+
+@enduml

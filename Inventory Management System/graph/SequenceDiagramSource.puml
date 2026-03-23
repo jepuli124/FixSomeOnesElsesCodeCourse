@@ -1,0 +1,37 @@
+@startuml
+
+actor       User       
+
+
+
+boundary    dashboard
+boundary    billing
+
+Entity      create_db
+
+control     Product
+control     Employee
+control     Category
+control     Supplier
+control     Sales
+
+entity      file
+
+database    Database    
+
+User -> create_db : creates databases
+create_db -> Database : adds tables
+User -> dashboard : Uses dashboard 
+dashboard -> Employee : controls employee
+Employee -> Database : saves/edits/removes employee
+dashboard -> Supplier : controls supplier
+Supplier -> Database : saves/edits/removes supplier  
+dashboard -> Product: controls Products
+Product -> Database : saves/edits/removes Product
+User -> billing : Uses billing 
+billing -> file : creates bill
+User -> dashboard : Uses dashboard 
+dashboard -> Sales : loads sales
+Sales -> User : shows sales  
+
+@enduml
