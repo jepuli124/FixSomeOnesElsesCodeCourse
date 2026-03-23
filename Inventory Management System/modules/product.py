@@ -1,6 +1,6 @@
 from tkinter import*
 from tkinter import ttk,messagebox
-import databaseHandler
+from . import databaseHandler
 
 class productClass:
     def __init__(self,root):
@@ -11,13 +11,13 @@ class productClass:
         self.root.focus_force()
         #---------------------------------------
         #----------- variables -------------
-        self.input_cat=StringVar()
-        self.cat_list=[]
-        self.sup_list=[]
-        self.refresh_cat()
-        self.refresh_sup()
+        self.input_categories=StringVar()
+        self.categories_list=[]
+        self.suppliers_list=[]
+        self.refresh_categories()
+        self.refresh_suppliers()
         self.input_pid=StringVar()
-        self.input_sup=StringVar()
+        self.input_suppliers=StringVar()
         self.input_name=StringVar()
         self.input_price=StringVar()
         self.input_qty=StringVar()
@@ -38,11 +38,11 @@ class productClass:
         Label(product_Frame,text="Quantity",font=("goudy old style",18),bg="white").place(x=30,y=260)
         Label(product_Frame,text="Status",font=("goudy old style",18),bg="white").place(x=30,y=310)
 
-        cmb_cat=ttk.Combobox(product_Frame,textvariable=self.input_cat,values=self.cat_list,state='readonly',justify=CENTER,font=("goudy old style",15))
+        cmb_cat=ttk.Combobox(product_Frame,textvariable=self.input_categories,values=self.categories_list,state='readonly',justify=CENTER,font=("goudy old style",15))
         cmb_cat.place(x=150,y=60,width=200)
         cmb_cat.current(0)
 
-        cmb_sup=ttk.Combobox(product_Frame,textvariable=self.input_sup,values=self.sup_list,state='readonly',justify=CENTER,font=("goudy old style",15))
+        cmb_sup=ttk.Combobox(product_Frame,textvariable=self.input_suppliers,values=self.suppliers_list,state='readonly',justify=CENTER,font=("goudy old style",15))
         cmb_sup.place(x=150,y=110,width=200)
         cmb_sup.current(0)
 
@@ -103,35 +103,35 @@ class productClass:
         self.ProductTable.pack(fill=BOTH,expand=1)
         self.ProductTable.bind("<ButtonRelease-1>",self.get_data_table)
         self.refresh_product_table()
-        self.refresh_cat()
-        self.refresh_sup()
+        self.refresh_categories()
+        self.refresh_suppliers()
 #-----------------------------------------------------------------------------------------------------
-    def refresh_cat(self):
-        self.cat_list.append("Empty")
+    def refresh_categories(self):
+        self.categories_list.append("Empty")
         cur, con = databaseHandler.get_con_and_cursor()
         try:
             cur.execute("select name from category")
-            cat=cur.fetchall()
-            if len(cat)>0:
-                del self.cat_list[:]
-                self.cat_list.append("Select")
-                for i in cat:
-                    self.cat_list.append(i[0])
+            categories=cur.fetchall()
+            if len(categories)>0:
+                del self.categories_list[:]
+                self.categories_list.append("Select")
+                for i in categories:
+                    self.categories_list.append(i[0])
 
         except Exception as ex:
             messagebox.showerror("Error",f"Error due to : {str(ex)}")
     
-    def refresh_sup(self):
-        self.sup_list.append("Empty")
+    def refresh_suppliers(self):
+        self.suppliers_list.append("Empty")
         cur, con = databaseHandler.get_con_and_cursor()
         try:
             cur.execute("select name from supplier")
-            sup=cur.fetchall()
-            if len(sup)>0:
-                del self.sup_list[:]
-                self.sup_list.append("Select")
-                for i in sup:
-                    self.sup_list.append(i[0])
+            suppliers=cur.fetchall()
+            if len(suppliers)>0:
+                del self.suppliers_list[:]
+                self.suppliers_list.append("Select")
+                for i in suppliers:
+                    self.suppliers_list.append(i[0])
         except Exception as ex:
             messagebox.showerror("Error",f"Error due to : {str(ex)}")
     
@@ -139,7 +139,7 @@ class productClass:
     def add_product(self):
         cur, con = databaseHandler.get_con_and_cursor()
         try:
-            if self.input_cat.get()=="Select" or self.input_cat.get()=="Empty" or self.input_sup=="Select" or self.input_sup=="Empty":
+            if self.input_categories.get()=="Select" or self.input_categories.get()=="Empty" or self.input_suppliers=="Select" or self.input_suppliers=="Empty":
                 messagebox.showerror("Error","All fields are required",parent=self.root)
             else:
                 cur.execute("Select * from product where name=?",(self.input_name.get(),))
@@ -148,8 +148,8 @@ class productClass:
                     messagebox.showerror("Error","Product already present",parent=self.root)
                 else:
                     cur.execute("insert into product(Category,Supplier,name,price,qty,status) values(?,?,?,?,?,?)",(
-                        self.input_cat.get(),
-                        self.input_sup.get(),
+                        self.input_categories.get(),
+                        self.input_suppliers.get(),
                         self.input_name.get(),
                         self.input_price.get(),
                         self.input_qty.get(),
@@ -178,8 +178,8 @@ class productClass:
         content=(self.ProductTable.item(f))
         row=content['values']
         self.input_pid.set(row[0])
-        self.input_cat.set(row[1])
-        self.input_sup.set(row[2])
+        self.input_categories.set(row[1])
+        self.input_suppliers.set(row[2])
         self.input_name.set(row[3])
         self.input_price.set(row[4])
         self.input_qty.set(row[5])
@@ -197,8 +197,8 @@ class productClass:
                     messagebox.showerror("Error","Invalid Product",parent=self.root)
                 else:
                     cur.execute("update product set Category=?,Supplier=?,name=?,price=?,qty=?,status=? where pid=?",(
-                        self.input_cat.get(),
-                        self.input_sup.get(),
+                        self.input_categories.get(),
+                        self.input_suppliers.get(),
                         self.input_name.get(),
                         self.input_price.get(),
                         self.input_qty.get(),
@@ -232,8 +232,8 @@ class productClass:
             messagebox.showerror("Error",f"Error due to : {str(ex)}")
 
     def clear_inputfields(self):
-        self.input_cat.set("Select")
-        self.input_sup.set("Select")
+        self.input_categories.set("Select")
+        self.input_suppliers.set("Select")
         self.input_name.set("")
         self.input_price.set("")
         self.input_qty.set("")

@@ -3,14 +3,14 @@ from PIL import Image, ImageTk
 from tkinter import messagebox
 import time
 import os
-import directoryHandler
-import databaseHandler
+from . import directoryHandler
+from . import databaseHandler
 
-from employee import employeeClass
-from supplier import supplierClass
-from category import categoryClass
-from product import productClass
-from sales import salesClass
+from .employee import employeeClass
+from .supplier import supplierClass
+from .category import categoryClass
+from .product import productClass
+from .sales import salesClass
 
 BASE_DIR = directoryHandler.base_path()
 IMAGE_DIR = directoryHandler.image_path()
@@ -39,7 +39,7 @@ class IMS:
 
         # ------------ logout button -----------
         Button(
-            self.root, text="Logout", command=self.logout,
+            self.root, text="Shutdown", command=self.logout,
             font=("times new roman", 15, "bold"),
             bg="yellow", cursor="hand2"
         ).place(x=1150, y=10, height=50, width=150)
@@ -167,6 +167,7 @@ class IMS:
 
         self.update_content()
 
+
     # -------------- functions ----------------
     def logout(self):
         exit(0)
@@ -218,7 +219,9 @@ class IMS:
 
         except Exception as ex:
             messagebox.showerror("Error", f"Error due to : {str(ex)}", parent=self.root)
-            
+
+        self.update_clock()
+
     def update_clock(self):
         time_ = time.strftime("%I:%M:%S")
         date_ = time.strftime("%d-%m-%Y")
@@ -226,7 +229,7 @@ class IMS:
             text=f"Welcome to Inventory Management System\t\t Date: {date_}\t\t Time: {time_}"
         )
 
-        self.lbl_clock.after(200, self.update_clock)
+        self.lbl_clock.after(200, self.update_content)
 
 def main():
     root = Tk()

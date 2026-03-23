@@ -3,8 +3,8 @@ from tkinter import ttk,messagebox
 import time
 import os
 import tempfile
-import databaseHandler
-import directoryHandler
+from . import databaseHandler
+from . import directoryHandler
 
 BASE_DIR = directoryHandler.base_path()
 IMAGE_DIR = directoryHandler.image_path()
@@ -24,7 +24,7 @@ class billClass:
         Label(self.root,text="Inventory Management System",image=self.icon_title,compound=LEFT,font=("times new roman",40,"bold"),bg="#010c48",fg="white",anchor="w",padx=20).place(x=0,y=0,relwidth=1,height=70)
 
         #------------ logout button -----------
-        Button(self.root,text="Logout",command=self.logout, font=("times new roman",15,"bold"),bg="yellow",cursor="hand2").place(x=1150,y=10,height=50,width=150)
+        Button(self.root,text="Shutdown",command=self.logout, font=("times new roman",15,"bold"),bg="yellow",cursor="hand2").place(x=1150,y=10,height=50,width=150)
 
         #------------ clock -----------------
         self.lbl_clock=Label(self.root,text="Welcome to Inventory Management System\t\t Date: DD:MM:YYYY\t\t Time: HH:MM:SS",font=("times new roman",15),bg="#4d636d",fg="white")

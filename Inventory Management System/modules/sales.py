@@ -2,7 +2,7 @@ from tkinter import *
 from PIL import Image, ImageTk
 from tkinter import messagebox
 import os
-import directoryHandler
+from . import directoryHandler
 
 # ------------------ BASE PATH SETUP ------------------
 BASE_DIR = directoryHandler.base_path() 

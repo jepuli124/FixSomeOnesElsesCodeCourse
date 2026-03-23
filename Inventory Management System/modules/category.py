@@ -1,8 +1,8 @@
 from tkinter import*
 from PIL import Image,ImageTk
 from tkinter import ttk,messagebox
-import databaseHandler
-import directoryHandler
+from . import databaseHandler
+from . import directoryHandler
 
 BASE_DIR = directoryHandler.base_path()
 IMAGE_DIR = directoryHandler.image_path()

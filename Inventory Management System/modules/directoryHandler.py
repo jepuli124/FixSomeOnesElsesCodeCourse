@@ -1,7 +1,8 @@
 import os
 def base_path():
     # ------------------ BASE PATH SETUP ------------------
-    BASE_DIR = os.path.dirname(os.path.abspath(os.path.join(os.path.dirname(__file__),".")))
+    BASE_DIR = os.path.dirname(".")
+    #print(BASE_DIR)
     return BASE_DIR
     # ---------------------------------------------------
 
@@ -28,4 +29,5 @@ def bill_path():
 def database_path():
     BASE_DIR = base_path()
     DB_DIR = os.path.join(BASE_DIR, "database")
+    os.makedirs(DB_DIR, exist_ok=True)
     return DB_DIR

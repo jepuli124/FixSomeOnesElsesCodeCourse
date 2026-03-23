@@ -1,6 +1,6 @@
 from tkinter import*
 from tkinter import ttk,messagebox
-import databaseHandler
+from . import databaseHandler
 
 
 class employeeClass:
